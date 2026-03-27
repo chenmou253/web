@@ -59,10 +59,17 @@ router.beforeEach(async (to) => {
     return '/login'
   }
   if (!userStore.routesReady) {
-    await userStore.fetchProfile()
-    setupDynamicRoutes(userStore.menus)
-    userStore.routesReady = true
-    return to.fullPath
+    try {
+      await userStore.fetchProfile()
+      setupDynamicRoutes(userStore.menus)
+      userStore.routesReady = true
+      return to.fullPath
+    } catch (_) {
+      if (!userStore.accessToken) {
+        return '/login'
+      }
+      return false
+    }
   }
   return true
 })
