@@ -1,0 +1,37 @@
+:root {
+  --bg-app: linear-gradient(135deg, #f4f7fb 0%, #eef4ea 100%);
+  --bg-panel: rgba(255, 255, 255, 0.92);
+  --color-primary: #1f7a5c;
+  --color-primary-soft: #e9f6ef;
+  --color-text: #1f2937;
+  --color-border: #d9e3dd;
+  --shadow-panel: 0 18px 45px rgba(24, 39, 32, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--bg-app);
+  color: var(--color-text);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+.page-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-panel);
+  padding: 20px;
+}
