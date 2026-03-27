@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/store/user'
-import router from '@/router'
 
 const request = axios.create({
   baseURL: '/api/v1',
@@ -10,8 +9,19 @@ const request = axios.create({
 
 let sessionExpiredHandled = false
 
+function redirectToLogin() {
+  if (window.location.pathname !== '/login') {
+    window.location.replace('/login')
+    return
+  }
+  sessionExpiredHandled = false
+}
+
 request.interceptors.request.use((config) => {
   const userStore = useUserStore()
+  if (config.url?.includes('/auth/login')) {
+    sessionExpiredHandled = false
+  }
   if (userStore.accessToken) {
     config.headers.Authorization = `Bearer ${userStore.accessToken}`
   }
@@ -37,7 +47,7 @@ request.interceptors.response.use(
           ElMessage.error('账号已在其他设备登录，请重新登录')
         }
         userStore.reset()
-        router.replace('/login')
+        redirectToLogin()
       }
     }
 
@@ -47,17 +57,11 @@ request.interceptors.response.use(
         ElMessage.error('账号已在其他设备登录，请重新登录')
       }
       userStore.reset()
-      router.replace('/login')
+      redirectToLogin()
     }
 
     return Promise.reject(error)
   }
 )
-
-router.afterEach((to) => {
-  if (to.path === '/login') {
-    sessionExpiredHandled = false
-  }
-})
 
 export default request
